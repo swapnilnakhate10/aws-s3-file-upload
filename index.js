@@ -2,14 +2,19 @@ const express = require('express')
 const app = express();
 const AWS = require('aws-sdk')
 
-AWS.config.update({ region: 'eu-central-1' });
+AWS.config.update({
+  accessKeyId: process.env.AWS_SECRET_KEY,
+  secretAccessKey : process.env.AWS_SECRET_KEY,
+  region: 'us-east-1'
+});
 
 app.get('/generate-presigned-url', async (req, res) => {
     const s3 = new AWS.S3();
   const fileName = 'free_delivery.png';
+  const bucketName = 'sdist-testfiles';
   console.log("fileName ",fileName);
   const params = {
-    Bucket: 'sdist-testfiles',
+    Bucket: bucketName,
     Key: fileName, // The name of the file in S3
     Expires: 19600, // Time in seconds for the URL to remain valid
   };
